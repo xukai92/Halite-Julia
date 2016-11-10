@@ -14,7 +14,7 @@ type Location
   x :: Int64
   y :: Int64
   Location(x::Int64, y::Int64) = new(x, y)
-  Location() = Location(0, 0)
+  Location() = Location(1, 1)
 end
 
 type Site
@@ -51,9 +51,9 @@ type GameMap
   GameMap() = GameMap(0, 0, 0)
 end
 
-isBounds(gm::GameMap, l::Location) = l.x >= 0 && l.x < gm.width && l.y >= 0 && l.y < gm.height
+isBounds(gm::GameMap, l::Location) = l.x > 0 && l.x <= gm.width && l.y > 0 && l.y <= gm.height
 
-function getDistance(gm::GameMap, l1::Location, l2::Location)
+function getDeviation(gm::GameMap, l1::Location, l2::Location)
   dx = abs(l1.x - l2.x)
   dy = abs(l1.y - l2.y)
   if dx > gm.width / 2
@@ -62,24 +62,16 @@ function getDistance(gm::GameMap, l1::Location, l2::Location)
   if dy > gm.height / 2
     dy = gm.height - dy
   end
+  (dx, dy)
+end
+
+function getDistance(gm::GameMap, l1::Location, l2::Location)
+  dx, dy = getDeviation(gm, l1, l2)
   dx + dy
 end
 
 function getAngle(gm::GameMap, l1::Location, l2::Location)
-  dx = l2.x - l1.x
-  dy = l2.y - l1.y
-
-  if dx > gm.width - dx
-    dx -= gm.width
-  elseif -dx > gm.width + dx
-    dx += gm.width
-  end
-
-  if dy > gm.height - dy
-    dy -= gm.height
-  elseif -dy > gm.height + dy
-    dy += gm.height
-  end
+  dx, dy = getDeviation(gm, l1, l2)
   atan2(dy, dx)
 end
 
@@ -87,28 +79,28 @@ function getLocation(gm::GameMap, loc::Location, direction::Int64)
   l = deepcopy(loc)
   if direction != STILL
     if direction == NORTH
-      if l.y == 0
-        l.y = gm.height - 1
+      if l.y == 1
+        l.y = gm.height
       else
-        l.y -= 1
+        l.y = l.y - 1
       end
     elseif direction == EAST
-      if l.x == gm.width - 1
-        l.x = 0
+      if l.x == gm.width
+        l.x = 1
       else
-        l.x += 1
+        l.x = l.x + 1
       end
     elseif direction == SOUTH
-      if l.y == gm.height - 1
-        l.y = 0
+      if l.y == gm.height
+        l.y = 1
       else
-        l.y += 1
+        l.y = l.y + 1
       end
     elseif direction == WEST
-      if l.x == 0
-        l.x = gm.width - 1
+      if l.x == 1
+        l.x = gm.width
       else
-        l.x -= 1
+        l.x = l.x - 1
       end
     end
   end
