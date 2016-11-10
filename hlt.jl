@@ -36,7 +36,7 @@ type GameMap
   width :: Int64
   height :: Int64
   contents :: Vector{Vector{Site}}
-  function GameMap(width::Int64, height::Int64, numberOfPlayers::Int64)
+  function GameMap(width::Int64, height::Int64)
     contents = Vector{Vector{Site}}()
     for y in 0:height-1
       row = Vector{Site}()
@@ -47,8 +47,7 @@ type GameMap
     end
     new(width, height, contents)
   end
-  GameMap(width::Int64, height::Int64) = GameMap(width, height, 0)
-  GameMap() = GameMap(0, 0, 0)
+  GameMap() = GameMap(0, 0)
 end
 
 isBounds(gm::GameMap, l::Location) = l.x >= 0 && l.x < gm.width && l.y >= 0 && l.y < gm.height
@@ -87,26 +86,26 @@ function getLocation(gm::GameMap, loc::Location, direction::Int64)
   l = deepcopy(loc)
   if direction != STILL
     if direction == NORTH
-      if l.y == 1
-        l.y = gm.height
+      if l.y == 0
+        l.y = gm.height - 1
       else
         l.y = l.y - 1
       end
     elseif direction == EAST
-      if l.x == gm.width
-        l.x = 1
+      if l.x == gm.width - 1
+        l.x = 0
       else
         l.x = l.x + 1
       end
     elseif direction == SOUTH
-      if l.y == gm.height
-        l.y = 1
+      if l.y == gm.height - 1
+        l.y = 0
       else
         l.y = l.y + 1
       end
     elseif direction == WEST
-      if l.x == 1
-        l.x = gm.width
+      if l.x == 0
+        l.x = gm.width - 1
       else
         l.x = l.x - 1
       end
