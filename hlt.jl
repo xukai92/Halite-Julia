@@ -47,6 +47,7 @@ type GameMap
     end
     new(width, height, contents)
   end
+  GameMap(width::Int64, height::Int64) = GameMap(width, height, 0)
   GameMap() = GameMap(0, 0, 0)
 end
 
