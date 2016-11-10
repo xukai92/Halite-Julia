@@ -34,18 +34,18 @@ function deserializeMap(inputString::String)
 
   m = GameMap(_width, _height)
 
-  y = 0
-  x = 0
+  y = 1
+  x = 1
   counter = 0
   owner = 0
-  while y != m.height
+  while ~(y > m.height)
     counter = parse(pop!(splitString))
     owner = parse(pop!(splitString))
-    for a in 0:counter-1
+    for a in 1:counter
       m.contents[y][x].owner = owner
       x += 1
       if x == m.width
-        x = 0
+        x = 1
         y += 1
       end
     end
@@ -62,7 +62,7 @@ function deserializeMap(inputString::String)
 end
 
 function sendString(toBeSent::String)
-  toBeSent *= '\n'
+  toBeSent *= "\n"
 
   write(STDOUT, toBeSent)
   flush(STDOUT)
