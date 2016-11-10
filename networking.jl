@@ -1,5 +1,3 @@
-include("hlt.jl")
-
 _productions = Vector{Vector{Int64}}()
 _width = -1
 _height = -1
