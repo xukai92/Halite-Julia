@@ -20,9 +20,9 @@ end
 function deserializeProductions(inputString::String)
   splitString = reverse(split(inputString, " "))
 
-  for a in 0:_height-1
+  for a in 1:_height
     row = Vector{Int64}()
-    for b in 0:_width-1
+    for b in 1:_width
       push!(row, parse(pop!(splitString)))
     end
     push!(_productions, row)
@@ -51,8 +51,8 @@ function deserializeMap(inputString::String)
     end
   end
 
-  for a in 0:_height-1
-    for b in 0:_width-1
+  for a in 1:_height
+    for b in 1:_width
       m.contents[a][b].strength = parse(pop!(splitString))
       m.contents[a][b].production = _productions[a][b]
     end
